@@ -1,0 +1,11 @@
+- name: start proxmox vm
+  proxmox_kvm:
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_host }}"
+    state: started
+    name: "{{ vm_name }}"
+
+- name: pause for 15 seconds to let VM boot
+  pause:
+    seconds: 15

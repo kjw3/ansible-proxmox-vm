@@ -1,0 +1,28 @@
+#TODO: Need to check size of disk first before blindly resizing
+- name: resize disk
+  delegate_to: "{{ proxmox_host }}"
+  remote_user: root
+  command: "qm resize {{ vm_id }} virtio0 +{{ vm_disk_gb }}G"
+
+#- name: add cores and memory
+#  command: "qm set {{ vm_id }} -cores {{ vm_cores }} -memory {{ vm_ram }}"
+
+- name: update vm nics
+  delegate_to: "{{ proxmox_host }}"
+  remote_user: root
+  command: "qm set {{ vm_id }} --net{{ item.index }} {{ item.config }}"
+  loop: "{{ vm_nics }}"
+
+- name: add static ip configs with gateway
+  delegate_to: "{{ proxmox_host }}"
+  remote_user: root
+  command: "qm set {{ vm_id }} -ipconfig{{ item.index }} ip={{ item.ip }}/{{ item.prefix }},gw={{ item.gateway }}"
+  loop: "{{ vm_nics }}"
+  when: item.gateway is defined
+
+- name: add static ip addresses without gateway
+  delegate_to: "{{ proxmox_host }}"
+  remote_user: root
+  command: "qm set {{ vm_id }} -ipconfig{{ item.index }} ip={{ item.ip }}/{{ item.prefix }}"
+  loop: "{{ vm_nics }}"
+  when: item.gateway is not defined

@@ -1,0 +1,17 @@
+---
+proxmox_host: pve1.example.com
+proxmox_user: root
+proxmox_password: p@ssw0rd
+vm_clone: rhel7
+vm_node: pve1
+vm_name: test.example.com
+vm_pool: proxmox_pool
+vm_disk_gb: 10
+vm_cores: 1
+vm_ram: 1024
+vm_nics:
+  - index: 0
+    config: "virtio,bridge=vmbr0"
+    ip: "192.168.0.150"
+    prefix: 24
+    gateway: "192.168.0.1"

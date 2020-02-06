@@ -1,0 +1,18 @@
+---
+- name: stop proxmox vm
+  proxmox_kvm:
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_host }}"
+    state: stopped
+    name: "{{ vm_name }}"  # The target VM name
+  tags: teardown
+
+- name: teardown proxmox vm
+  proxmox_kvm:
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_host }}"
+    state: absent
+    name: "{{ vm_name }}"  # The target VM name
+  tags: teardown

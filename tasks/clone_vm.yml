@@ -1,0 +1,28 @@
+- name: clone proxmox vm from template
+  proxmox_kvm:
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_host }}"
+    name: "{{ vm_name }}"  # The target VM name
+    node: "{{ vm_node }}"
+    clone: "{{ vm_clone }}"   # The VM source
+    pool: "{{ vm_pool }}"
+    onboot: yes
+    agent: yes
+    timeout: 500  # Note: The task can take a while. Adapt
+
+- name: pause after VM clone for 15 seconds
+  pause:
+    seconds: 15
+
+- name: update hardware on proxmox vm
+  proxmox_kvm:
+    api_user: "{{ proxmox_user }}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_host }}"
+    name: "{{ vm_name }}"  # The target VM name
+    node: "{{ vm_node }}"
+    cores: "{{ vm_cores }}"
+    memory: "{{ vm_ram }}"
+    update: yes
+  register: proxmox_vm_result
